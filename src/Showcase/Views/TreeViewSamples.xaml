@@ -1,9 +1,10 @@
-﻿<UserControl x:Class="Showcase.WPF.DragDrop.Views.TreeViewSamples"
+<UserControl x:Class="Showcase.WPF.DragDrop.Views.TreeViewSamples"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:model="clr-namespace:Showcase.WPF.DragDrop.Models"
              xmlns:viewModels="clr-namespace:Showcase.WPF.DragDrop.ViewModels"
              xmlns:views="clr-namespace:Showcase.WPF.DragDrop.Views"
              d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
@@ -42,13 +43,11 @@
                                 </Grid.RowDefinitions>
 
                                 <TreeView x:Name="LeftBoundTreeView"
-                                          Grid.Column="0"
                                           Grid.Row="0"
                                           dd:DragDrop.IsDragSource="True"
                                           dd:DragDrop.IsDropTarget="True"
                                           dd:DragDrop.UseDefaultDragAdorner="True"
                                           dd:DragDrop.UseDefaultEffectDataTemplate="True"
-                                          dd:DragDrop.SelectDroppedItems="True"
                                           ItemContainerStyle="{StaticResource BoundTreeViewItemStyle}"
                                           Loaded="LeftBoundTreeView_Loaded"
                                           ItemsSource="{Binding Data.TreeCollection1}">
@@ -59,7 +58,6 @@
                                     </TreeView.ItemTemplate>
                                 </TreeView>
                                 <TreeView x:Name="RightBoundTreeView"
-                                          Grid.Column="1"
                                           Grid.Row="0"
                                           dd:DragDrop.IsDragSource="True"
                                           dd:DragDrop.IsDropTarget="True"
@@ -135,6 +133,37 @@
                                       IsChecked="{Binding ElementName=LeftUnboundTreeView, Path=(dd:DragDrop.UseDefaultEffectDataTemplate), Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                     </ScrollViewer>
+                </DockPanel>
+            </TabItem>
+
+            <TabItem Header="Two levels only">
+                <DockPanel LastChildFill="True">
+                    <TextBlock Text="Two levels only"
+                               DockPanel.Dock="Top"
+                               Style="{StaticResource SampleHeaderTextBlockStyle}" />
+
+                    <TextBlock Text="There is a school with five Classes and every Pupil can belong to one class. The pupils are allowed to change the Class and they are allowed to move in the list, but they are not allowed to be nested."
+                               DockPanel.Dock="Top"
+                               Style="{StaticResource DefaultTextBlockStyle}" />
+                    <TreeView x:Name="ClassesTreeView"
+                              Height="Auto"
+                              dd:DragDrop.DropHandler="{Binding Source={x:Static model:TwoLevelTreeViewDropHandler.Instance}}"
+                              dd:DragDrop.IsDragSource="True"
+                              dd:DragDrop.IsDropTarget="True"
+                              dd:DragDrop.UseDefaultDragAdorner="True"
+                              dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                              ItemsSource="{Binding Data.Classes}">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type model:Class}" ItemsSource="{Binding Pupils}">
+                                <TextBlock Text="{Binding Name}" />
+                                <HierarchicalDataTemplate.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" />
+                                    </DataTemplate>
+                                </HierarchicalDataTemplate.ItemTemplate>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
                 </DockPanel>
             </TabItem>
         </TabControl>

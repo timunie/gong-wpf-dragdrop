@@ -52,6 +52,8 @@ namespace Showcase.WPF.DragDrop.Models
                 this.TabItemCollection1.Add(new TabItemModel(i + 1));
             }
             this.TabItemCollection2.Add(new TabItemModel(1));
+
+            LoadClasses();
         }
 
         public ObservableCollection<SerializableItemModel> SerializableCollection1 { get; set; } = new ObservableCollection<SerializableItemModel>();
@@ -101,5 +103,28 @@ namespace Showcase.WPF.DragDrop.Models
         public ListBoxCustomDropHandler ListBoxCustomDropHandler { get; set; } = new ListBoxCustomDropHandler();
 
         public IDropTarget NestedDropHandler { get; set; } = new NestedDropHandler();
+
+
+        #region Pupil-Classes-TreeViewExample
+
+        public ObservableCollection<Class> Classes { get; } = new ObservableCollection<Class>();
+
+        void LoadClasses()
+        {
+            int i = 1;
+            foreach (var item in new []{ "A", "B", "C", "D", "E"})
+            {
+                var newClass = new Class($"Class {item}");
+
+                for (int j = 0; j < 10; j++)
+                {
+                    newClass.Pupils.Add(new Pupil($"Pupil {i++}"));
+                }
+
+                Classes.Add(newClass);
+            }
+        }
+
+        #endregion
     }
 }
